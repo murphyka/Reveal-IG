@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "revealig"
+version = "0.1.0"
+description = "Reveal-IG: feature attribution via distributional paths"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Kieran A. Murphy", email = "kieran.murphy@njit.edu"},
+    {name = "Shameen Shrestha", email = "ss5375@njit.edu"},
+]
+keywords = ["explainability", "feature attribution", "integrated gradients", "XAI"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.1",
+    "torchvision>=0.16",
+    "captum>=0.7",
+    "numpy>=1.24",
+    "matplotlib>=3.7",
+    "tqdm>=4.65",
+    "Pillow>=10.0",
+]
+
+[project.optional-dependencies]
+examples = [
+    "scikit-learn>=1.3",
+    "shap>=0.44",
+    "saliency>=0.1.3",
+    "scipy>=1.10",
+]
+dev = [
+    "pytest>=7",
+    "pytest-cov",
+    "scikit-learn>=1.3",
+    "shap>=0.44",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/murphyka/revealig"
+"Paper" = "https://arxiv.org/abs/PLACEHOLDER"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["revealig*"]
