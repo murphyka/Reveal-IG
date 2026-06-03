@@ -26,7 +26,7 @@ pip install -e ".[examples]"
 
 ## Quick start: images
 
-Compare Reveal-IG against IG and SmoothGrad on two images:
+Compare Reveal-IG against IG, SmoothGrad, IDG, Guided IG, and Blur-IG on two images (included in the repo):
 
 ```bash
 python compare_images.py --images bird.jpg dog.jpg
@@ -44,27 +44,7 @@ python compare_images.py \
     --n-background 100
 ```
 
-The output is a PNG grid per image: top-15 predicted classes, then one attribution row per top-3 class showing Reveal-IG, IG, SmoothGrad, IDG, Guided IG, and Blur-IG.
-
-Guided IG uses the [PAIR saliency library](https://github.com/PAIR-code/saliency); Blur-IG uses a custom scipy-based implementation. Both are included in `pip install "revealig[examples]"`.
-
-### All `compare_images.py` options
-
-| Flag | Default | Description |
-|---|---|---|
-| `--images` | *(required)* | Image file(s) or directory |
-| `--outdir` | `results/` | Output directory |
-| `--target` | argmax | ImageNet class index to attribute |
-| `--n-steps` | 50 | Reveal-IG integration steps |
-| `--n-samples` | 10 | Reveal-IG MC samples per step |
-| `--ig-steps` | 50 | Steps for IG and IDG |
-| `--sg-samples` | 50 | SmoothGrad samples |
-| `--sigma-final` | 1/256 | Final σ (ignored with `--adaptive-sigma`) |
-| `--adaptive-sigma` | off | Adaptive σ_stop |
-| `--clip-pct` | 99 | Colour scale clip percentile |
-| `--background-dir` | None | ImageNet train dir for Expected Gradients (optional) |
-| `--n-background` | 100 | Number of background images |
-| `--device` | auto | PyTorch device string |
+The output is a PNG grid per image: top-15 predicted classes, then one attribution row per top-3 class showing the different methods' attribution.
 
 ## Quick start — tabular
 
@@ -73,6 +53,8 @@ Self-contained demo on California Housing regression (downloads automatically, n
 ```bash
 python examples/tabular_demo.py
 ```
+
+Trains a small MLP, then runs Reveal-IG and KernelSHAP on a single test prediction and saves a side-by-side comparison to `tabular_attributions.png`. Features are standard-scored (zero mean, unit variance) so that pool distances are on a common scale across features.
 
 ## Quick start — synthetic (2D toy functions)
 
@@ -90,10 +72,7 @@ Produces two figures in `results/`:
 python examples/synthetic_demo.py --only heatmap    # just the attribution comparison
 python examples/synthetic_demo.py --only multistep  # just the multi-step figure
 python examples/synthetic_demo.py --grid-resolution 60  # faster (default 100)
-python examples/synthetic_demo.py --svg             # also save as SVG
 ```
-
-Trains a small MLP, then runs Reveal-IG and KernelSHAP on a single test prediction and saves a side-by-side comparison to `tabular_attributions.png`. Features are standard-scored (zero mean, unit variance) so that pool distances are on a common scale across features.
 
 ## Python API
 
@@ -136,12 +115,6 @@ result = attributor.attribute(x_test, X_background, show_progress=True)
 # result.attr: (D,) attributions in standardized output units
 # sum(result.attr) ≈ E[f(x_test)] − E_{pool-uniform}[f(x)] ≈ f(x_test) when y is standardized
 ```
-
-The tabular method integrates along an entropy path in pool-assignment space: at
-each path position, feature i is sampled from the training pool using a softmax
-with per-feature temperature τ_i(s), calibrated so that the value-collapsed
-assignment entropy equals s · H_max_i. Gradients are computed in closed form
-(no autograd in the integration loop). See the paper for details.
 
 ## Package layout
 
