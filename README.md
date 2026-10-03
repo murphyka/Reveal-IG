@@ -4,6 +4,8 @@
 
 > **Paper:** *Attribution via Distributional Paths for Information Revelation* · [arXiv:2606.03885](https://arxiv.org/abs/2606.03885)
 
+<img src=koi_swim_2x2_goldfish.gif width=50%>
+
 ---
 
 Reveal-IG is a feature attribution method that lifts path attribution from **input space** to **distribution space**. Instead of interpolating from a baseline input to the explained input (as in standard Integrated Gradients), Reveal-IG integrates gradients along a path through the space of probe distributions that progressively concentrate around the input. At each point on the path the model is queried under the current distribution via Monte Carlo sampling, and attribution is accumulated from the gradient of the expected model response with respect to the distribution parameters.
